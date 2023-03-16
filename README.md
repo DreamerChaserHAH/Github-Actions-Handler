@@ -12,4 +12,19 @@ Manually doing CI/CD on VPS servers are quite painful and unrealisticly slow. I 
 
 ## Usage
 
-*Will be updated later*
+![envpng](https://user-images.githubusercontent.com/109950820/225601383-b47c1bdd-b955-4f4e-b271-013c51be513b.png)
+
+there is a sample.env file contain the 2 variables that you can adjust
+
+### PORT
+
+This will be the port at which the server would be running on
+
+### CMS_API_URL
+
+This will be api endpoint to call to obtain the necessary json
+
+**Make sure to have a ".env" instead of a "sample.env" to make the program runnable**
+
+and then you can execute the function by visiting http://{hostname}:{your_port}?command={command_code},
+
