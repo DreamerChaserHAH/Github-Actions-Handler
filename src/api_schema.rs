@@ -6,6 +6,9 @@ use reqwest;
 use serde::{Deserialize, Serialize};
 use serde_json::Result;
 
+use runtime_format::{FormatArgs, FormatKey, FormatKeyError};
+use core::fmt;
+
 
 ///<summary>
 /// This script will containt the schema for the api and will also be used to retrieve data from the api
@@ -25,16 +28,42 @@ impl executionData{
     }
 }
 
+/*#region unique_identifier_code_formatter */
+struct UNIQUE_IDENTIFIER{
+    code: String
+}
+
+impl UNIQUE_IDENTIFIER{
+    fn new(code: String) -> UNIQUE_IDENTIFIER{
+        UNIQUE_IDENTIFIER { code: code }
+    }
+}
+impl FormatKey for UNIQUE_IDENTIFIER{
+    fn fmt(&self, key: &str, f: &mut fmt::Formatter<'_>) -> std::result::Result<(), FormatKeyError> {
+        match key {
+            "uniqueidentifier"    => write!(f, "{}", self.code).map_err(FormatKeyError::Fmt),
+            _ => Err(FormatKeyError::UnknownKey),
+        }
+    }
+}
+
+/*#endregion */
+
 pub async fn process_command(code: &str) -> std::result::Result<(),  String>{
+
 
     let cms_link_result = env::var(CMS_API_URL_CODE);
 
     if cms_link_result.is_ok() {
 
-        let api_link = cms_link_result.unwrap() + code;
-        println!("{:?}", api_link);
+        let cms_link_result_string = cms_link_result.unwrap();
+        let cms_link_formatter_original: &str = cms_link_result_string.as_str();
+        
+        let api_format = FormatArgs::new(cms_link_formatter_original, &UNIQUE_IDENTIFIER::new("hi".into())).to_string();
+        let api: String = api_format;
+        println!("{:?}", api);
         //making connection to the cms server to retrieve the command and process it
-        let response_result = reqwest::get(api_link).await;
+        let response_result = reqwest::get(api).await;
         if response_result.is_ok() {
 
             let response_text = response_result.unwrap().text().await.unwrap();
