@@ -88,3 +88,13 @@ It would be the path where the executable is located
 #### Command
 
 It would be the command arguments that should be processed
+
+
+
+## Crates Used
+
+[runtime-format - crates.io: Rust Package Registry](https://crates.io/crates/runtime-format)
+
+[actix-web - crates.io: Rust Package Registry](https://crates.io/crates/actix-web)
+
+
